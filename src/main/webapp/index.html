@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NextRTC sample one</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+</head>
+<body>
+	<div class="jumbotron">
+		<video id="local" autoplay></video>
+		<video id="remote" autoplay></video>
+
+		<button onclick="nextRTC.create('noga')">Create</button>
+		<button	onclick="nextRTC.join('noga')">Join</button>
+	</div>
+	<script src="js/adapter.js"></script>
+	<script src="js/nextRTC.js"></script>
+	<script src="js/jquery-2.1.3.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script>
+		var nextRTC = null;
+		NextRTC.onReady = function() {
+			nextRTC = new NextRTC({
+				wsURL : 'ws://examples.nextrtc.org/videochat/signaling',
+				mediaConfig : {
+					video : true,
+					sdpConstraints : {
+						'mandatory' : {
+							'OfferToReceiveVideo' : true
+						}
+					},
+				},
+				peerConfig : {
+					'iceServers' : [ {
+						url : "stun:stun.l.google.com:19302"
+					} ]
+				},
+			});
+
+			nextRTC.on('created', function(nextRTC, event) {
+			});
+
+			nextRTC.on('joined', function(nextRTC, event) {
+			});
+
+			nextRTC.on('localStream', function(nextRTC, stream) {
+				attachMediaStream($('#local')[0], stream.stream);
+			});
+
+			nextRTC.on('remoteStream', function(nextRTC, stream) {
+				attachMediaStream($('#remote')[0], stream.stream);
+			});
+
+			nextRTC.on('left', function(nextRTC, event) {
+				alert(event.from + " left!");
+			});
+		};
+	</script>
+	<script>
+  	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-8445910-5', 'auto');
+  	ga('send', 'pageview');
+
+	</script>
+</body>
+</html>
