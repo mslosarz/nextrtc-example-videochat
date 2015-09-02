@@ -44,7 +44,7 @@
 
 			nextRTC.on('joined', function(nextRTC, event) {
 				console.log(JSON.stringify(event));
-				alert('Member with id ' + event.from + ' left conversation');
+				alert('Member with id ' + event.from + ' joined conversation');
 			});
 
 			nextRTC.on('localStream', function(nextRTC, stream) {
