@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>org.nextrtc.signalingserver</groupId>
 			<artifactId>nextrtc-signaling-server</artifactId>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -73,9 +73,8 @@
 				<version>2.2</version>
 				<configuration>
 					<path>/${project.build.finalName}</path>
-					<username>${tomcat-username}</username>
-					<password>${tomcat-password}</password>
-					<url>${tomcat-url}</url>
+					<url>http://localhost:8080/manager/text</url>
+					<server>tomcat</server>
 				</configuration>
 			</plugin>
 		</plugins>
