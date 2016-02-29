@@ -13,8 +13,9 @@
 		<video id="local" autoplay></video>
 		<video id="remote" autoplay></video>
 
-		<button onclick="nextRTC.create('my-unique-room-name')">Create</button>
-		<button	onclick="nextRTC.join('my-unique-room-name')">Join</button>
+		Conversation id:<input id="convId" type="text"/>
+		<button onclick="createConversation()">Create</button>
+		<button	onclick="joinConversation()">Join</button>
 	</div>
 	<script src="js/adapter.js"></script>
 	<script src="js/nextRTC.js"></script>
@@ -22,10 +23,20 @@
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<script>
+		var createConversation = function(){
+			var convId = $('#convId').val();
+			nextRTC.create(convId);
+		};
+
+		var joinConversation = function(){
+			var convId = $('#convId').val();
+			nextRTC.join(convId);
+		};
+
 		var nextRTC = null;
 		NextRTC.onReady = function() {
 			nextRTC = new NextRTC({
-				wsURL : 'ws://localhost:8080/videochat/signaling',
+				wsURL : 'wss://examples.nextrtc.org/videochat/signaling',
 				mediaConfig : {
 					video : true,
 					audio : true,
@@ -39,7 +50,7 @@
 
 			nextRTC.on('created', function(nextRTC, event) {
 				console.log(JSON.stringify(event));
-				alert('Room with id ' + event.content + ' has been created');
+				alert('Room with id ' + event.content + ' has been created, share it with your friend to start videochat');
 			});
 
 			nextRTC.on('joined', function(nextRTC, event) {

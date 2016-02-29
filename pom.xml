@@ -73,7 +73,7 @@
 				<version>2.2</version>
 				<configuration>
 					<path>/${project.build.finalName}</path>
-					<url>http://localhost:8080/manager/text</url>
+					<url>https://examples.nextrtc.org/manager/text</url>
 					<server>tomcat</server>
 				</configuration>
 			</plugin>
