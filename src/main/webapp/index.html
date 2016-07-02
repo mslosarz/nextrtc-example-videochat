@@ -9,14 +9,16 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 </head>
 <body>
-	<div class="jumbotron">
-		<video id="local" autoplay></video>
-		<video id="remote" autoplay></video>
-
-		Conversation id:<input id="convId" type="text"/>
-		<button onclick="createConversation()">Create</button>
-		<button	onclick="joinConversation()">Join</button>
+<div id="container" class="jumbotron">
 	</div>
+<div>
+	Conversation id:<input id="convId" type="text"/>
+	<button onclick="createConversation()">Create</button>
+	<button onclick="joinConversation()">Join</button>
+</div>
+<div>
+	<video id="template" width="320" height="240" autoplay></video>
+</div>
 	<script src="js/adapter.js"></script>
 	<script src="js/nextRTC.js"></script>
 	<script src="js/jquery-2.1.3.min.js"></script>
@@ -59,11 +61,15 @@
 			});
 
 			nextRTC.on('localStream', function(nextRTC, stream) {
-				attachMediaStream($('#local')[0], stream.stream);
+				var dest = $("#template").clone().prop({ id: Math.random().toString(36).substring(7)});
+				$("#container").append(dest);
+				attachMediaStream(dest[0], stream.stream);
 			});
 
 			nextRTC.on('remoteStream', function(nextRTC, stream) {
-				attachMediaStream($('#remote')[0], stream.stream);
+				var dest = $("#template").clone().prop({ id: Math.random().toString(36).substring(7)});
+				$("#container").append(dest);
+				attachMediaStream(dest[0], stream.stream);
 			});
 
 			nextRTC.on('left', function(nextRTC, event) {
@@ -72,6 +78,5 @@
 			});
 		};
 	</script>
-
 </body>
 </html>
