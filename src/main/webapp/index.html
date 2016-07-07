@@ -17,9 +17,9 @@
 	<button onclick="joinConversation()">Join</button>
 </div>
 <div>
-	<video id="template" width="320" height="240" autoplay></video>
+	<video id="template" width="320" height="240" autoplay controls></video>
 </div>
-	<script src="js/adapter.js"></script>
+<script src="https://webrtc.github.io/samples/src/js/adapter.js"></script>
 	<script src="js/nextRTC.js"></script>
 	<script src="js/jquery-2.1.3.min.js"></script>
 	<script
@@ -40,14 +40,18 @@
 			nextRTC = new NextRTC({
 				wsURL : 'wss://examples.nextrtc.org/videochat/signaling',
 				mediaConfig : {
-					video : true,
-					audio : true,
+					video : true
 				},
 				peerConfig : {
-					'iceServers' : [ {
-						url : "stun:stun.l.google.com:19302"
-					} ]
-				},
+				    'iceServers':
+				        [
+				            {"urls":
+				                ["stun:stun.l.google.com:19302"]
+				             }
+				        ],
+				    'iceTransportPolicy':'all',
+				    'rtcpMuxPolicy':'negotiate'
+				}
 			});
 
 			nextRTC.on('created', function(nextRTC, event) {
@@ -60,16 +64,16 @@
 				alert('Member with id ' + event.from + ' joined conversation');
 			});
 
-			nextRTC.on('localStream', function(nextRTC, stream) {
-				var dest = $("#template").clone().prop({ id: Math.random().toString(36).substring(7)});
+			nextRTC.on('localStream', function(member, stream) {
+				var dest = $("#template").clone().prop({ id: 'local'});
 				$("#container").append(dest);
-				attachMediaStream(dest[0], stream.stream);
+				dest[0].srcObject = stream.stream;
 			});
 
-			nextRTC.on('remoteStream', function(nextRTC, stream) {
-				var dest = $("#template").clone().prop({ id: Math.random().toString(36).substring(7)});
+			nextRTC.on('remoteStream', function(member, stream) {
+				var dest = $("#template").clone().prop({ id: member});
 				$("#container").append(dest);
-				attachMediaStream(dest[0], stream.stream);
+				dest[0].srcObject = stream.stream;
 			});
 
 			nextRTC.on('left', function(nextRTC, event) {
