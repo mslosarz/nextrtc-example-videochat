@@ -1,6 +1,7 @@
 This example is available at page
 http://nextrtc.org/examples
 
-If you want to try this example in your local environment you have to change:
-
-wsURL in index.html file otherwise your local deployed application will use examples server instead of yours local machine.
+Clone project and then
+- enter to directory with project
+- run: mvn clean install && java -jar target/videochat.war
+- enter localhost:8080 in your favourite browser :)
