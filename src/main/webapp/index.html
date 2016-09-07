@@ -14,7 +14,9 @@
 <div>
 	Conversation id:<input id="convId" type="text"/>
 	<button onclick="createConversation()">Create</button>
+	<button onclick="createBroadcastConversation()">Create broadcast</button>
 	<button onclick="joinConversation()">Join</button>
+	<button onclick="leaveConversation()">Leave</button>
 </div>
 <div>
 	<video id="template" width="320" height="240" autoplay controls></video>
@@ -29,10 +31,18 @@
 			var convId = $('#convId').val();
 			nextRTC.create(convId);
 		};
+		var createBroadcastConversation = function(){
+			var convId = $('#convId').val();
+			nextRTC.create(convId, {type : 'BROADCAST'});
+		};
 
 		var joinConversation = function(){
 			var convId = $('#convId').val();
 			nextRTC.join(convId);
+		};
+
+		var leaveConversation = function(){
+			nextRTC.leave();
 		};
 
 		var nextRTC = null;
@@ -61,7 +71,12 @@
 
 			nextRTC.on('joined', function(nextRTC, event) {
 				console.log(JSON.stringify(event));
-				alert('Member with id ' + event.from + ' joined conversation');
+				alert('You have been joined to conversation ' + event.content);
+			});
+
+			nextRTC.on('newJoined', function(nextRTC, event) {
+				console.log(JSON.stringify(event));
+				alert('Member with id ' + event.from + ' has joined conversation');
 			});
 
 			nextRTC.on('localStream', function(member, stream) {
