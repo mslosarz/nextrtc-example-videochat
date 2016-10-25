@@ -91,12 +91,12 @@
 		nextRTC.on('remoteStream', function(member, stream) {
 			var dest = $("#template").clone().prop({ id: stream.member});
 			$("#container").append(dest);
-			dest[0].src = URL.createObjectURL(stream.stream);
+			dest[0].srcObject = stream.stream;
 		});
 
 		nextRTC.on('left', function(nextRTC, event) {
 			console.log(JSON.stringify(event));
-			$('#container').remove('#' + event.from);
+			$('#' + event.from).remove();
 			$('#log').append('<li>' + event.from + " left!</li>");
 		});
 
