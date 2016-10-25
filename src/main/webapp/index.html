@@ -51,17 +51,17 @@
 		};
 
 		var nextRTC = new NextRTC({
-			wsURL : 'ws://localhost:8080/signaling',
+			wsURL : 'wss://examples.nextrtc.org/videochat/signaling',
 			mediaConfig : {
-				video : true
+				video : true,
+				audio : true,
 			},
 			peerConfig : {
-				iceServers:
-					[
-						{urls:
-							["stun:stun.l.google.com:19302"]
-						 }
-					],
+				iceServers: [
+        {urls: "stun:23.21.150.121"},
+        {urls: "stun:stun.l.google.com:19302"},
+        {urls: "turn:numb.viagenie.ca", credential: "webrtcdemo", username: "louis@mozilla.com"}
+    ],
 				iceTransportPolicy:'all',
 				rtcpMuxPolicy:'negotiate'
 			}
@@ -89,13 +89,14 @@
 		});
 
 		nextRTC.on('remoteStream', function(member, stream) {
-			var dest = $("#template").clone().prop({ id: member});
+			var dest = $("#template").clone().prop({ id: stream.member});
 			$("#container").append(dest);
-			dest[0].srcObject = stream.stream;
+			dest[0].src = URL.createObjectURL(stream.stream);
 		});
 
 		nextRTC.on('left', function(nextRTC, event) {
 			console.log(JSON.stringify(event));
+			$('#container').remove('#' + event.from);
 			$('#log').append('<li>' + event.from + " left!</li>");
 		});
 
