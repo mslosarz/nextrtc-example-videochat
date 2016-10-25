@@ -19,6 +19,11 @@
 	<button onclick="leaveConversation()">Leave</button>
 </div>
 <div>
+	<ul id="log">
+
+	</ul>
+</div>
+<div>
 	<video id="template" width="320" height="240" autoplay controls></video>
 </div>
 <script src="https://webrtc.github.io/samples/src/js/adapter.js"></script>
@@ -45,57 +50,55 @@
 			nextRTC.leave();
 		};
 
-		var nextRTC = null;
-		NextRTC.onReady = function() {
-			nextRTC = new NextRTC({
-				wsURL : 'ws://localhost:8080/signaling',
-				mediaConfig : {
-					video : true
-				},
-				peerConfig : {
-				    iceServers:
-				        [
-				            {urls:
-				                ["stun:stun.l.google.com:19302"]
-				             }
-				        ],
-				    iceTransportPolicy:'all',
-				    rtcpMuxPolicy:'negotiate'
-				}
-			});
+		var nextRTC = new NextRTC({
+			wsURL : 'ws://localhost:8080/signaling',
+			mediaConfig : {
+				video : true
+			},
+			peerConfig : {
+				iceServers:
+					[
+						{urls:
+							["stun:stun.l.google.com:19302"]
+						 }
+					],
+				iceTransportPolicy:'all',
+				rtcpMuxPolicy:'negotiate'
+			}
+		});
 
-			nextRTC.on('created', function(nextRTC, event) {
-				console.log(JSON.stringify(event));
-				alert('Room with id ' + event.content + ' has been created, share it with your friend to start videochat');
-			});
+		nextRTC.on('created', function(nextRTC, event) {
+			console.log(JSON.stringify(event));
+			$('#log').append('<li>Room with id ' + event.content + ' has been created, share it with your friend to start videochat</li>');
+		});
 
-			nextRTC.on('joined', function(nextRTC, event) {
-				console.log(JSON.stringify(event));
-				alert('You have been joined to conversation ' + event.content);
-			});
+		nextRTC.on('joined', function(nextRTC, event) {
+			console.log(JSON.stringify(event));
+			$('#log').append('<li>You have been joined to conversation ' + event.content + '</li>');
+		});
 
-			nextRTC.on('newJoined', function(nextRTC, event) {
-				console.log(JSON.stringify(event));
-				alert('Member with id ' + event.from + ' has joined conversation');
-			});
+		nextRTC.on('newJoined', function(nextRTC, event) {
+			console.log(JSON.stringify(event));
+			$('#log').append('<li>Member with id ' + event.from + ' has joined conversation</li>');
+		});
 
-			nextRTC.on('localStream', function(member, stream) {
-				var dest = $("#template").clone().prop({ id: 'local'});
-				$("#container").append(dest);
-				dest[0].srcObject = stream.stream;
-			});
+		nextRTC.on('localStream', function(member, stream) {
+			var dest = $("#template").clone().prop({ id: 'local'});
+			$("#container").append(dest);
+			dest[0].srcObject = stream.stream;
+		});
 
-			nextRTC.on('remoteStream', function(member, stream) {
-				var dest = $("#template").clone().prop({ id: member});
-				$("#container").append(dest);
-				dest[0].srcObject = stream.stream;
-			});
+		nextRTC.on('remoteStream', function(member, stream) {
+			var dest = $("#template").clone().prop({ id: member});
+			$("#container").append(dest);
+			dest[0].srcObject = stream.stream;
+		});
 
-			nextRTC.on('left', function(nextRTC, event) {
-				console.log(JSON.stringify(event));
-				alert(event.from + " left!");
-			});
-		};
+		nextRTC.on('left', function(nextRTC, event) {
+			console.log(JSON.stringify(event));
+			$('#log').append('<li>' + event.from + " left!</li>");
+		});
+
 	</script>
 </body>
 </html>
