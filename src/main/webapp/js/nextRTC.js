@@ -32,7 +32,9 @@ var NextRTC = function NextRTC(config) {
             content: convId,
             custom: custom });
         if(!this.channelReady){
-            this.waiting.push(req);
+            if(req.signal !== undefined && req.signal !== ''){
+                this.waiting.push(req);
+            }
         } else {
             console.log("req: " + req);
             this.signaling.send(req);
