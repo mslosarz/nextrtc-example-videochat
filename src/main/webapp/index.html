@@ -86,6 +86,7 @@
 			var dest = $("#template").clone().prop({ id: 'local'});
 			$("#container").append(dest);
 			dest[0].srcObject = stream.stream;
+			dest[0].muted = true;
 		});
 
 		nextRTC.on('remoteStream', function(member, stream) {
