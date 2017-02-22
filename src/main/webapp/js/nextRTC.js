@@ -142,13 +142,6 @@ var NextRTC = function NextRTC(config) {
         });
     };
 
-    this.close = function(nextRTC, event) {
-        nextRTC.signaling.close();
-        if(nextRTC.localStream != null){
-            nextRTC.localStream.stop();
-        }
-    };
-
     this.candidate = function(nextRTC, signal) {
         var pc = nextRTC.preparePeerConnection(nextRTC, signal.from);
         pc['pc'].addIceCandidate(new RTCIceCandidate(JSON.parse(signal.content.replace(new RegExp('\'', 'g'), '"'))), that.success, that.error);
@@ -221,9 +214,32 @@ NextRTC.prototype.join = function join(convId, custom) {
 NextRTC.prototype.leave = function leave() {
     var nextRTC = this;
     nextRTC.request('left');
-    nextRTC.signaling.close();
+    for(var pc in nextRTC.peerConnections){
+        nextRTC.release(pc);
+    }
     if(nextRTC.localStream != null){
-        nextRTC.localStream.stop();
+        nextRTC.localStream.getTracks().forEach(function(track){
+            track.stop();
+        });
+    }
+};
+
+NextRTC.prototype.release = function release(member) {
+    var nextRTC = this;
+    nextRTC.peerConnections[member].pc.close();
+    delete nextRTC.peerConnections[member];
+};
+
+NextRTC.prototype.close = function close() {
+    var nextRTC = this;
+    nextRTC.signaling.close();
+    for(var pc in nextRTC.peerConnections){
+        nextRTC.release(pc);
+    }
+    if(nextRTC.localStream != null){
+        nextRTC.localStream.getTracks().forEach(function(track){
+            track.stop();
+        });
     }
 };
 

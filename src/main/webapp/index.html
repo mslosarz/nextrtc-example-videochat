@@ -47,6 +47,7 @@
 		};
 
 		var leaveConversation = function(){
+			$('#container').empty();
 			nextRTC.leave();
 		};
 
@@ -96,6 +97,7 @@
 		});
 
 		nextRTC.on('left', function(nextRTC, event) {
+			nextRTC.release(event.from);
 			console.log(JSON.stringify(event));
 			$('#' + event.from).remove();
 			$('#log').append('<li>' + event.from + " left!</li>");
