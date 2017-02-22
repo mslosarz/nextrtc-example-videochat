@@ -52,7 +52,7 @@
 		};
 
 		var nextRTC = new NextRTC({
-			wsURL : 'wss://localhost:8433/signaling',
+			wsURL : 'wss://'+location.hostname+(location.port ? ':'+location.port: '')+'/signaling',	// 'wss://localhost:8433/signaling'
 			mediaConfig : {
 				video : true,
 				audio : true,
