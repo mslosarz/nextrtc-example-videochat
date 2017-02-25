@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>NextRTC sample one</title>
+    <title>NextRTC sample one (server 0.0.6-SNAPSHOT)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
@@ -52,7 +52,7 @@
 		};
 
 		var nextRTC = new NextRTC({
-			wsURL : 'wss://'+location.hostname+(location.port ? ':'+location.port: '')+'/signaling',	// 'wss://localhost:8433/signaling'
+			wsURL : 'wss://'+location.hostname+(location.port ? ':'+location.port: '')+'/signaling',
 			mediaConfig : {
 				video : true,
 				audio : true,
@@ -102,6 +102,11 @@
 			$('#' + event.from).remove();
 			$('#log').append('<li>' + event.from + " left!</li>");
 		});
+
+		nextRTC.on('error', function(nextRTC, event) {
+            console.log(JSON.stringify(event));
+            $('#log').append('<li>Something goes wrong! '+ event.content +'</li>')
+        });
 
 	</script>
 </body>

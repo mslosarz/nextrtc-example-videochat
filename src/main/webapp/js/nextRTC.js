@@ -50,6 +50,7 @@ var NextRTC = function NextRTC(config) {
     this.signaling.onopen = function() {
         console.log("channel ready");
         that.setChannelReady();
+        that.onReady();
     };
 
     this.signaling.onclose = function(event) {
@@ -177,12 +178,6 @@ var NextRTC = function NextRTC(config) {
         console.log('It is highly recommended to override method NextRTC.onReady');
     };
 
-
-    if (document.addEventListener) {
-        document.addEventListener('DOMContentLoaded', function() {
-            that.onReady();
-        });
-    }
 };
 
 NextRTC.prototype.on = function on(signal, operation) {
@@ -232,14 +227,10 @@ NextRTC.prototype.release = function release(member) {
 
 NextRTC.prototype.close = function close() {
     var nextRTC = this;
-    nextRTC.signaling.close();
+    if(nextRTC.signaling)
+        nextRTC.signaling.close();
     for(var pc in nextRTC.peerConnections){
         nextRTC.release(pc);
-    }
-    if(nextRTC.localStream != null){
-        nextRTC.localStream.getTracks().forEach(function(track){
-            track.stop();
-        });
     }
 };
 
