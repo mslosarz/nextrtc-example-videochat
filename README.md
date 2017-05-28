@@ -1,14 +1,17 @@
 This example is available at page
-https://examples.nextrtc.org/
+[https://examples.nextrtc.org/](https://examples.nextrtc.org/)
 
 Clone project and then
-- enter to directory with project
-- run: mvn clean install && java -jar target/videochat.war
+* enter to directory with project
+* run: ```mvn clean install && java -jar target/videochat.war```
 
-enter to directory src/main/resources
+enter to directory ```src/main/resources```
 and generate self signed certificate (in repository certificate might be expired):
+```bash
 keytool -genkey -alias tomcat -keyalg RSA  -keystore keystore.jks
+```
 
+```
 Enter keystore password: password
 Re-enter new password: password
 What is your first and last name?
@@ -27,13 +30,14 @@ Is CN=127.0.0.1, OU=Develepment, O=NextRTC, L=Cracow, ST=Malopolskie, C=PL corre
 ct?
   [no]:  yes
 
-Enter key password for <tomcat> (RETURN if same as keystore password): <RETURN>
+Enter key password for <tomcat>
+  (RETURN if same as keystore password): <RETURN>
+```
 
 then:
-- run: mvn clean install && java -jar target/videochat.war
-- enter https://localhost:8433 in your favourite browser
-#### HTTPS is important, because default http handler isn't configured ####
-- accept untrusted certificate
+* run: ```mvn clean install && java -jar target/videochat.war ```
+* enter [https://localhost:8433](https://localhost:8433) in your favourite browser
+(**HTTPS is important, because default http handler isn't configured**)
+* accept untrusted certificate
 
-###############
-Sometimes websocket (js side) is throwing exception then try to change localhost to 127.0.0.1
+_Sometimes websocket (js side) is throwing exception then try to change localhost to 127.0.0.1_
