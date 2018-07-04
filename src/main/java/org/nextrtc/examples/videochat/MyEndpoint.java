@@ -2,6 +2,7 @@ package org.nextrtc.examples.videochat;
 
 import org.nextrtc.signalingserver.api.NextRTCServer;
 import org.nextrtc.signalingserver.domain.Connection;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -42,7 +43,7 @@ public class MyEndpoint extends TextWebSocketHandler {
 
     private final NextRTCServer server;
 
-    @Inject
+    @Autowired
     MyEndpoint(NextRTCServer server) {
         this.server = server;
     }
