@@ -8,7 +8,6 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import javax.inject.Inject;
 import java.io.IOException;
 
 

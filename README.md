@@ -36,7 +36,7 @@ Enter key password for <tomcat>
 
 then:
 * run: ```mvn clean install && java -jar target/videochat.war ```
-* enter [https://localhost:8433](https://localhost:8433) in your favourite browser
+* enter [https://localhost:8443](https://localhost:8443) in your favourite browser
 (**HTTPS is important, because default http handler isn't configured**)
 * accept untrusted certificate
 

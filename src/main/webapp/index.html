@@ -1,113 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>NextRTC Spring</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <title>NextRTC Example Webapp</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 </head>
 <body>
 <div id="container" class="jumbotron">
-	</div>
-<div>
-	Conversation id:<input id="convId" type="text"/>
-	<button onclick="createConversation()">Create</button>
-	<button onclick="createBroadcastConversation()">Create broadcast</button>
-	<button onclick="joinConversation()">Join</button>
-	<button onclick="leaveConversation()">Leave</button>
 </div>
 <div>
-	<ul id="log">
-
-	</ul>
+    Conversation id:<input id="convId" type="text"/>
+    <button onclick="window.app.createConversation()">Create</button>
+    <button onclick="window.app.createBroadcastConversation()">Create broadcast</button>
+    <button onclick="window.app.joinConversation()">Join</button>
+    <button onclick="window.app.leaveConversation()">Leave</button>
+    <button onclick="window.app.upperCase()">UpperCase</button>
 </div>
 <div>
-	<video id="template" width="320" height="240" autoplay controls></video>
+    <ul id="log">
+
+    </ul>
 </div>
-<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-	<script src="js/nextRTC.js"></script>
-	<script src="js/jquery-2.1.3.min.js"></script>
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-	<script>
-		var createConversation = function(){
-			var convId = $('#convId').val();
-			nextRTC.create(convId);
-		};
-		var createBroadcastConversation = function(){
-			var convId = $('#convId').val();
-			nextRTC.create(convId, {type : 'BROADCAST'});
-		};
-
-		var joinConversation = function(){
-			var convId = $('#convId').val();
-			nextRTC.join(convId);
-		};
-
-		var leaveConversation = function(){
-			$('#container').empty();
-			nextRTC.leave();
-		};
-
-		var nextRTC = new NextRTC({
-			wsURL : 'wss://'+location.hostname+(location.port ? ':'+location.port: '')+'/signaling',
-			mediaConfig : {
-				video : true,
-				audio : true,
-			},
-			peerConfig : {
-				iceServers: [
-        {urls: "stun:23.21.150.121"},
-        {urls: "stun:stun.l.google.com:19302"},
-        {urls: "turn:numb.viagenie.ca", credential: "webrtcdemo", username: "louis@mozilla.com"}
-    ],
-				iceTransportPolicy:'all',
-				rtcpMuxPolicy:'negotiate'
-			}
-		});
-
-		nextRTC.on('created', function(nextRTC, event) {
-			console.log(JSON.stringify(event));
-			$('#log').append('<li>Room with id ' + event.content + ' has been created, share it with your friend to start videochat</li>');
-		});
-
-		nextRTC.on('joined', function(nextRTC, event) {
-			console.log(JSON.stringify(event));
-			$('#log').append('<li>You have been joined to conversation ' + event.content + '</li>');
-		});
-
-		nextRTC.on('newJoined', function(nextRTC, event) {
-			console.log(JSON.stringify(event));
-			$('#log').append('<li>Member with id ' + event.from + ' has joined conversation</li>');
-		});
-
-		nextRTC.on('localStream', function(member, stream) {
-			var dest = $("#template").clone().prop({ id: 'local'});
-			$("#container").append(dest);
-			dest[0].srcObject = stream.stream;
-			dest[0].muted = true;
-		});
-
-		nextRTC.on('remoteStream', function(member, stream) {
-			var dest = $("#template").clone().prop({ id: stream.member});
-			$("#container").append(dest);
-			dest[0].srcObject = stream.stream;
-		});
-
-		nextRTC.on('left', function(nextRTC, event) {
-			nextRTC.release(event.from);
-			console.log(JSON.stringify(event));
-			$('#' + event.from).remove();
-			$('#log').append('<li>' + event.from + " left!</li>");
-		});
-
-		nextRTC.on('error', function(nextRTC, event) {
-            console.log(JSON.stringify(event));
-            $('#log').append('<li>Something goes wrong! '+ event.content +'</li>')
-        });
-
-	</script>
+<div>
+    <video id="template" width="320" height="240" autoplay controls></video>
+</div>
+<script src="bundle.js"></script>
 </body>
 </html>
