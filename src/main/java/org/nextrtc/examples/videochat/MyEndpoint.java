@@ -38,6 +38,11 @@ public class MyEndpoint extends TextWebSocketHandler {
                 throw new RuntimeException(e);
             }
         }
+
+        @Override
+        public void close() throws IOException {
+            session.close();
+        }
     }
 
     private final NextRTCServer server;
