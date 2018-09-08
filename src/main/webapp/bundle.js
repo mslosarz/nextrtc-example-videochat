@@ -105,7 +105,7 @@ window.app = {
     nextRTC.join(convId);
   },
   leaveConversation: function () {
-      $('.remotestream').remove();
+    $('.remotestream').remove();
     nextRTC.leave();
   },
   upperCase: function () {
@@ -158,7 +158,7 @@ nextRTC.on('localStream', function (stream) {
 });
 
 nextRTC.on('remoteStream', function (stream) {
-    var dest = $("#template").clone().addClass('remotestream').prop({id: stream.member});
+  var dest = $("#template").clone().addClass('remotestream').prop({id: stream.member});
   $("#container").append(dest);
   dest[0].srcObject = stream.stream;
 });
@@ -240,12 +240,12 @@ var Message = function () {
 }();
 
 var SignalingChannel = function () {
-    function SignalingChannel(wsURL, debug) {
+  function SignalingChannel(wsURL, debug) {
     var _this = this;
 
     _classCallCheck(this, SignalingChannel);
 
-        this.debug = debug;
+    this.debug = debug;
     this.onSignal = function () {};
     this.waiting = [];
     this.channelReady = false;
@@ -259,9 +259,9 @@ var SignalingChannel = function () {
     };
 
     this.websocket.onmessage = function (event) {
-        if (debug) {
-            console.log('res: ' + event.data);
-        }
+      if (debug) {
+        console.log('res: ' + event.data);
+      }
       var signal = JSON.parse(event.data);
       _this.onSignal(signal.signal, signal);
     };
@@ -271,9 +271,9 @@ var SignalingChannel = function () {
     };
 
     this.websocket.onerror = function (error) {
-        if (debug) {
-            console.log('Communication channel is broken', error);
-        }
+      if (debug) {
+        console.log('Communication channel is broken', error);
+      }
       _this.onSignal('error', error);
     };
   }
@@ -286,18 +286,17 @@ var SignalingChannel = function () {
           this.waiting.push(payload);
         }
       }
-        if (this.debug) {
-            console.log('req: ', payload);
-        }
+      if (this.debug) {
+        console.log('req: ', payload);
+      }
       this.websocket.send(JSON.stringify(payload));
     }
   }, {
-      key: 'close',
-      value: function close() {
-          this.websocket.onclose = function () {
-          };
-          this.websocket.close();
-      }
+    key: 'close',
+    value: function close() {
+      this.websocket.onclose = function () {};
+      this.websocket.close();
+    }
   }, {
     key: 'setSignal',
     value: function setSignal(callback) {
@@ -312,14 +311,14 @@ var NextRTCClient = function () {
   function NextRTCClient(configuration) {
     var _this2 = this;
 
-      var debug = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    var debug = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
     _classCallCheck(this, NextRTCClient);
 
-      this.debug = debug;
+    this.debug = debug;
     this.configuration = configuration;
     this.handlers = this.initHandlers();
-      this.channel = new SignalingChannel(configuration.wsURL, this.debug);
+    this.channel = new SignalingChannel(configuration.wsURL, this.debug);
     this.localStream = undefined;
     this.peerConnections = {};
     this.channel.setSignal(function (s, p) {
@@ -331,9 +330,9 @@ var NextRTCClient = function () {
     key: 'on',
     value: function on(signal, handler) {
       if (this.handlers[signal]) {
-          if (this.debug) {
-              console.log("Replacing handler for signal: " + signal);
-          }
+        if (this.debug) {
+          console.log("Replacing handler for signal: " + signal);
+        }
       }
       this.handlers[signal] = handler;
     }
@@ -490,7 +489,7 @@ var NextRTCClient = function () {
 
       this.onPeerConnection(message.from, function (peer) {
         peer.addIceCandidate(new RTCIceCandidate(JSON.parse(message.content.replace(new RegExp('\'', 'g'), '"')), function () {
-            return _this10.debug ? console.log('candidates exchanged') : null;
+          return _this10.debug ? console.log('candidates exchanged') : null;
         }, function (err) {
           return _this10.execute('error', 'Candidate: Failed to exchange candidates ' + err);
         }));
@@ -511,7 +510,7 @@ var NextRTCClient = function () {
           return _this11.onIceCandidate(connectionName, event);
         };
         remoteConnection.oniceconnectionstatechange = function (change) {
-            return _this11.debug ? console.log('(' + connectionName + ') changed state to', remoteConnection.iceConnectionState) : null;
+          return _this11.debug ? console.log('(' + connectionName + ') changed state to', remoteConnection.iceConnectionState) : null;
         };
       }
       cb(remoteConnection);
@@ -527,11 +526,11 @@ var NextRTCClient = function () {
       if (this.handlers.hasOwnProperty(signal)) try {
         this.handlers[signal](event);
       } catch (err) {
-          if (this.debug) {
-              console.log('User handler on ' + signal + ' failed!', err);
-          }
+        if (this.debug) {
+          console.log('User handler on ' + signal + ' failed!', err);
+        }
       } else if (this.debug) {
-          console.log('Missing handler for ' + signal);
+        console.log('Missing handler for ' + signal);
       }
     }
   }, {
@@ -555,7 +554,10 @@ var NextRTCClient = function () {
   }, {
     key: 'release',
     value: function release(member) {
-      if (this.peerConnections[member]) this.peerConnections[member].close();
+      if (this.peerConnections[member]) {
+        this.peerConnections[member].close();
+        delete this.peerConnections[member];
+      }
     }
   }, {
     key: 'leave',
@@ -700,7 +702,7 @@ module.exports = function(dependencies, opts) {
       chromeShim.shimAddTrackRemoveTrack(window);
       chromeShim.shimGetSendersWithDtmf(window);
       chromeShim.shimSenderReceiverGetStats(window);
-        chromeShim.fixNegotiationNeeded(window);
+      chromeShim.fixNegotiationNeeded(window);
 
       commonShim.shimRTCIceCandidate(window);
       commonShim.shimMaxMessageSize(window);
@@ -760,7 +762,7 @@ module.exports = function(dependencies, opts) {
       commonShim.shimCreateObjectURL(window);
 
       safariShim.shimRTCIceServerUrls(window);
-        safariShim.shimCreateOfferLegacy(window);
+      safariShim.shimCreateOfferLegacy(window);
       safariShim.shimCallbacksAPI(window);
       safariShim.shimLocalStreamsAPI(window);
       safariShim.shimRemoteStreamsAPI(window);
@@ -825,10 +827,10 @@ function wrapPeerConnectionEvent(window, eventNameToWrap, wrapper) {
       return nativeAddEventListener.apply(this, arguments);
     }
     var wrappedCallback = function(e) {
-        var modifiedEvent = wrapper(e);
-        if (modifiedEvent) {
-            cb(modifiedEvent);
-        }
+      var modifiedEvent = wrapper(e);
+      if (modifiedEvent) {
+        cb(modifiedEvent);
+      }
     };
     this._eventMap = this._eventMap || {};
     this._eventMap[cb] = wrappedCallback;
@@ -1045,8 +1047,8 @@ module.exports = {
           }
           this.addEventListener('track', this._ontrack = f);
         },
-          enumerable: true,
-          configurable: true
+        enumerable: true,
+        configurable: true
       });
       var origSetRemoteDescription =
           window.RTCPeerConnection.prototype.setRemoteDescription;
@@ -1876,40 +1878,40 @@ module.exports = {
     };
   },
 
-    fixNegotiationNeeded: function (window) {
-        utils.wrapPeerConnectionEvent(window, 'negotiationneeded', function (e) {
-            var pc = e.target;
-            if (pc.signalingState !== 'stable') {
-                return;
-            }
-            return e;
-        });
-    },
+  fixNegotiationNeeded: function(window) {
+    utils.wrapPeerConnectionEvent(window, 'negotiationneeded', function(e) {
+      var pc = e.target;
+      if (pc.signalingState !== 'stable') {
+        return;
+      }
+      return e;
+    });
+  },
 
-    shimGetDisplayMedia: function (window, getSourceId) {
-        if ('getDisplayMedia' in window.navigator) {
-            return;
-        }
-        // getSourceId is a function that returns a promise resolving with
-        // the sourceId of the screen/window/tab to be shared.
-        if (typeof getSourceId !== 'function') {
-            console.error('shimGetDisplayMedia: getSourceId argument is not ' +
-                'a function');
-            return;
-        }
-        navigator.getDisplayMedia = function (constraints) {
-            return getSourceId(constraints)
-                .then(function (sourceId) {
-                    constraints.video = {
-                        mandatory: {
-                            chromeMediaSource: 'desktop',
-                            chromeMediaSourceId: sourceId,
-                            maxFrameRate: constraints.video.frameRate || 3
-                        }
-                    };
-                    return navigator.mediaDevices.getUserMedia(constraints);
-                });
-        };
+  shimGetDisplayMedia: function(window, getSourceId) {
+    if ('getDisplayMedia' in window.navigator) {
+      return;
+    }
+    // getSourceId is a function that returns a promise resolving with
+    // the sourceId of the screen/window/tab to be shared.
+    if (typeof getSourceId !== 'function') {
+      console.error('shimGetDisplayMedia: getSourceId argument is not ' +
+          'a function');
+      return;
+    }
+    navigator.getDisplayMedia = function(constraints) {
+      return getSourceId(constraints)
+        .then(function(sourceId) {
+          constraints.video = {
+            mandatory: {
+              chromeMediaSource: 'desktop',
+              chromeMediaSourceId: sourceId,
+              maxFrameRate: constraints.video.frameRate || 3
+            }
+          };
+          return navigator.mediaDevices.getUserMedia(constraints);
+        });
+    };
   }
 };
 
@@ -2054,9 +2056,9 @@ module.exports = function(window) {
   };
 
   var shimError_ = function(e) {
-      if (browserDetails.version >= 64) {
-          return e;
-      }
+    if (browserDetails.version >= 64) {
+      return e;
+    }
     return {
       name: {
         PermissionDeniedError: 'NotAllowedError',
@@ -2072,7 +2074,7 @@ module.exports = function(window) {
         DeviceCaptureError: 'AbortError'
       }[e.name] || e.name,
       message: e.message,
-        constraint: e.constraint || e.constraintName,
+      constraint: e.constraint || e.constraintName,
       toString: function() {
         return this.name + (this.message && ': ') + this.message;
       }
@@ -4431,15 +4433,15 @@ SDPUtils.parseSsrcMedia = function(line) {
   return parts;
 };
 
-        SDPUtils.parseSsrcGroup = function (line) {
-            var parts = line.substr(13).split(' ');
-            return {
-                semantics: parts.shift(),
-                ssrcs: parts.map(function (ssrc) {
-                    return parseInt(ssrc, 10);
-                })
-            };
-        };
+SDPUtils.parseSsrcGroup = function(line) {
+  var parts = line.substr(13).split(' ');
+  return {
+    semantics: parts.shift(),
+    ssrcs: parts.map(function(ssrc) {
+      return parseInt(ssrc, 10);
+    })
+  };
+};
 
 // Extracts the MID (RFC 5888) from a media section.
 // returns the MID or undefined if no mid line was found.
@@ -4625,7 +4627,7 @@ SDPUtils.parseRtpEncodingParameters = function(mediaSection) {
     if (codec.name.toUpperCase() === 'RTX' && codec.parameters.apt) {
       var encParam = {
         ssrc: primarySsrc,
-          codecPayloadType: parseInt(codec.parameters.apt, 10)
+        codecPayloadType: parseInt(codec.parameters.apt, 10)
       };
       if (primarySsrc && secondarySsrc) {
         encParam.rtx = {ssrc: secondarySsrc};
@@ -4670,7 +4672,7 @@ SDPUtils.parseRtpEncodingParameters = function(mediaSection) {
 SDPUtils.parseRtcpParameters = function(mediaSection) {
   var rtcpParameters = {};
 
-    // Gets the first SSRC. Note tha with RTX there might be multiple
+  // Gets the first SSRC. Note tha with RTX there might be multiple
   // SSRCs.
   var remoteSsrc = SDPUtils.matchPrefix(mediaSection, 'a=ssrc:')
       .map(function(line) {
@@ -4711,8 +4713,8 @@ SDPUtils.parseMsid = function(mediaSection) {
   .map(function(line) {
     return SDPUtils.parseSsrcMedia(line);
   })
-      .filter(function (msidParts) {
-          return msidParts.attribute === 'msid';
+  .filter(function(msidParts) {
+    return msidParts.attribute === 'msid';
   });
   if (planB.length > 0) {
     parts = planB[0].value.split(' ');
@@ -4743,7 +4745,7 @@ SDPUtils.writeSessionBoilerplate = function(sessId, sessVer) {
   // FIXME: sess-id should be an NTP timestamp.
   return 'v=0\r\n' +
       'o=thisisadapterortc ' + sessionId + ' ' + version +
-      ' IN IP4 127.0.0.1\r\n' +
+        ' IN IP4 127.0.0.1\r\n' +
       's=-\r\n' +
       't=0 0\r\n';
 };
@@ -4853,24 +4855,24 @@ SDPUtils.parseOLine = function(mediaSection) {
     sessionVersion: parseInt(parts[2], 10),
     netType: parts[3],
     addressType: parts[4],
-      address: parts[5]
+    address: parts[5]
   };
 };
 
 // a very naive interpretation of a valid SDP.
-        SDPUtils.isValidSDP = function (blob) {
-            if (typeof blob !== 'string' || blob.length === 0) {
-                return false;
-            }
-            var lines = SDPUtils.splitLines(blob);
-            for (var i = 0; i < lines.length; i++) {
-                if (lines[i].length < 2 || lines[i].charAt(1) !== '=') {
-                    return false;
-                }
-                // TODO: check the modifier a bit more.
-            }
-            return true;
-        };
+SDPUtils.isValidSDP = function(blob) {
+  if (typeof blob !== 'string' || blob.length === 0) {
+    return false;
+  }
+  var lines = SDPUtils.splitLines(blob);
+  for (var i = 0; i < lines.length; i++) {
+    if (lines[i].length < 2 || lines[i].charAt(1) !== '=') {
+      return false;
+    }
+    // TODO: check the modifier a bit more.
+  }
+  return true;
+};
 
 // Expose public methods.
 if (true) {
@@ -4962,8 +4964,8 @@ module.exports = {
             }.bind(this));
           }.bind(this));
         },
-          enumerable: true,
-          configurable: true
+        enumerable: true,
+        configurable: true
       });
     }
     if (typeof window === 'object' && window.RTCTrackEvent &&
@@ -5213,27 +5215,27 @@ module.exports = {
     }
   },
 
-    shimGetDisplayMedia: function (window, preferredMediaSource) {
-        if ('getDisplayMedia' in window.navigator) {
-            return;
-        }
-        navigator.getDisplayMedia = function (constraints) {
-            if (!(constraints && constraints.video)) {
-                var err = new DOMException('getDisplayMedia without video ' +
-                    'constraints is undefined');
-                err.name = 'NotFoundError';
-                // from https://heycam.github.io/webidl/#idl-DOMException-error-names
-                err.code = 8;
-                return Promise.reject(err);
-            }
-            if (constraints.video === true) {
-                constraints.video = {mediaSource: preferredMediaSource};
-            } else {
-                constraints.video.mediaSource = preferredMediaSource;
-            }
-            return navigator.mediaDevices.getUserMedia(constraints);
-        };
+  shimGetDisplayMedia: function(window, preferredMediaSource) {
+    if ('getDisplayMedia' in window.navigator) {
+      return;
     }
+    navigator.getDisplayMedia = function(constraints) {
+      if (!(constraints && constraints.video)) {
+        var err = new DOMException('getDisplayMedia without video ' +
+            'constraints is undefined');
+        err.name = 'NotFoundError';
+        // from https://heycam.github.io/webidl/#idl-DOMException-error-names
+        err.code = 8;
+        return Promise.reject(err);
+      }
+      if (constraints.video === true) {
+        constraints.video = {mediaSource: preferredMediaSource};
+      } else {
+        constraints.video.mediaSource = preferredMediaSource;
+      }
+      return navigator.mediaDevices.getUserMedia(constraints);
+    };
+  }
 };
 
 
@@ -5568,11 +5570,11 @@ module.exports = {
           this.addEventListener('addstream', this._onaddstream = f);
         }
       });
-        var origSetRemoteDescription =
-            window.RTCPeerConnection.prototype.setRemoteDescription;
-        window.RTCPeerConnection.prototype.setRemoteDescription = function () {
-            var pc = this;
-            if (!this._onaddstreampoly) {
+      var origSetRemoteDescription =
+          window.RTCPeerConnection.prototype.setRemoteDescription;
+      window.RTCPeerConnection.prototype.setRemoteDescription = function() {
+        var pc = this;
+        if (!this._onaddstreampoly) {
           this.addEventListener('track', this._onaddstreampoly = function(e) {
             e.streams.forEach(function(stream) {
               if (!pc._remoteStreams) {
@@ -5588,8 +5590,8 @@ module.exports = {
             });
           });
         }
-            return origSetRemoteDescription.apply(pc, arguments);
-        };
+        return origSetRemoteDescription.apply(pc, arguments);
+      };
     }
   },
   shimCallbacksAPI: function(window) {
@@ -5749,7 +5751,7 @@ module.exports = {
         }
 
 
-          if (typeof offerOptions.offerToReceiveVideo !== 'undefined') {
+        if (typeof offerOptions.offerToReceiveVideo !== 'undefined') {
           // support bit values
           offerOptions.offerToReceiveVideo = !!offerOptions.offerToReceiveVideo;
         }
